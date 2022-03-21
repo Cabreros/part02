@@ -22,17 +22,19 @@ const Content = ({ parts }) => {
       <Part part={parts[0]} />
       <Part part={parts[1]} />
       <Part part={parts[2]} />
+      <Part part={parts[3]} />
     </div>
   );
 };
 
 const Total = ({ parts }) => {
+  const total = parts.reduce((s, p) => {
+    return s + p.exercises;
+  }, 0);
+
   return (
     <div>
-      <p>
-        Number of exercises{" "}
-        {parts[0].exercises + parts[1].exercises + parts[2].exercises}
-      </p>
+      <p>Number of exercises {total}</p>
     </div>
   );
 };
@@ -52,6 +54,10 @@ const App = () => {
       {
         name: "State of a component",
         exercises: 14,
+      },
+      {
+        name: "Redux",
+        exercises: 11,
       },
     ],
   };
