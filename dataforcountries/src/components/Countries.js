@@ -1,3 +1,5 @@
+import Country from "./Country";
+
 const Countries = ({ countries }) => {
   if (countries.length === 0) {
     return <div>Nothing found</div>;
@@ -8,7 +10,7 @@ const Countries = ({ countries }) => {
       <div key={index}>{country.name}</div>
     ));
   } else if (countries.length === 1) {
-    return <div>{countries[0].name}</div>;
+    return <Country country={countries[0]} />;
   }
 };
 export default Countries;
