@@ -1,4 +1,5 @@
 import Country from "./Country";
+import ShowCountries from "./ShowCountries";
 
 const Countries = ({ countries }) => {
   if (countries.length === 0) {
@@ -7,7 +8,10 @@ const Countries = ({ countries }) => {
     return <div>Too many matches, specify another filter</div>;
   } else if (countries.length > 1) {
     return countries.map((country, index) => (
-      <div key={index}>{country.name}</div>
+      <div key={index}>
+        {country.name}
+        <ShowCountries country={country} />
+      </div>
     ));
   } else if (countries.length === 1) {
     return <Country country={countries[0]} />;
