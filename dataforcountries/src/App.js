@@ -8,7 +8,6 @@ function App() {
   const [showAll, setShowAll] = useState(true);
 
   useEffect(() => {
-    console.log("effect");
     axios.get("https://restcountries.com/v2/all").then((response) => {
       console.log("promise fulfilled");
       setCountries(response.data);
