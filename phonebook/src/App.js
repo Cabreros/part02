@@ -17,7 +17,7 @@ const App = () => {
       console.log("promise fulfilled");
       setPersons(response.data);
     });
-  }, [persons]);
+  }, []);
 
   const addPerson = (event) => {
     event.preventDefault();
@@ -26,7 +26,11 @@ const App = () => {
     } else {
       const newPerson = { name: newName, number: newNum };
       console.log("button clicked", event.target);
-      setPersons(persons.concat(newPerson));
+
+      axios.post("http://localhost:3001/persons", newPerson).then(() => {
+        console.log("promise fulfilled");
+        setPersons(persons.concat(newPerson));
+      });
       setNewName("");
       setNewNum("");
     }
