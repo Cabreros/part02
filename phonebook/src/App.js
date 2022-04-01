@@ -13,7 +13,6 @@ const App = () => {
   const [showAll, setShowAll] = useState(true);
 
   useEffect(() => {
-    console.log("effect");
     noteService.getAll().then((allPeople) => setPersons(allPeople));
   }, []);
 
@@ -33,17 +32,14 @@ const App = () => {
   };
 
   const handleNameChange = (event) => {
-    console.log(event.target.value);
     setNewName(event.target.value);
   };
 
   const handleNumChange = (event) => {
-    console.log(event.target.value);
     setNewNum(event.target.value);
   };
 
   const handleFilterChange = (event) => {
-    console.log(event.target.value);
     if (filter !== "") {
       setShowAll(false);
     }
