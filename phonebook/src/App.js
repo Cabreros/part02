@@ -3,6 +3,7 @@ import axios from "axios";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
+import noteService from "./modules/networking";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -13,10 +14,7 @@ const App = () => {
 
   useEffect(() => {
     console.log("effect");
-    axios.get("http://localhost:3001/persons").then((response) => {
-      console.log("promise fulfilled");
-      setPersons(response.data);
-    });
+    noteService.getAll().then((allPeople) => setPersons(allPeople));
   }, []);
 
   const addPerson = (event) => {
@@ -25,12 +23,10 @@ const App = () => {
       window.alert(`${newName} is already added to phonebook`);
     } else {
       const newPerson = { name: newName, number: newNum };
-      console.log("button clicked", event.target);
 
-      axios.post("http://localhost:3001/persons", newPerson).then(() => {
-        console.log("promise fulfilled");
-        setPersons(persons.concat(newPerson));
-      });
+      noteService
+        .create(newPerson)
+        .then((newAdd) => setPersons(persons.concat(newAdd)));
       setNewName("");
       setNewNum("");
     }
