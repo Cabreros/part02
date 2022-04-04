@@ -16,6 +16,6 @@ const update = (id, newObject) => {
   return request.then((response) => response.data);
 };
 
-const restMethods = { getAll, create, update };
+const del = (id) => axios.delete(`${baseUrl}/${id}`);
 
-export default { getAll, create, update };
+export default { getAll, create, update, del };

@@ -31,6 +31,14 @@ const App = () => {
     }
   };
 
+  const delPerson = (event) => {
+    if (window.confirm(`Delete ${event.target.name} ?`) === true) {
+      noteService.del(event.target.id);
+    }
+
+    setPersons(persons.filter((person) => person.id != event.target.id));
+  };
+
   const handleNameChange = (event) => {
     setNewName(event.target.value);
   };
@@ -67,7 +75,7 @@ const App = () => {
       />
 
       <h2>Numbers</h2>
-      <Persons filterNumbers={filterNumbers} />
+      <Persons filterNumbers={filterNumbers} delPerson={delPerson} />
     </div>
   );
 };
