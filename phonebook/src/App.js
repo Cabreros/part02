@@ -16,10 +16,28 @@ const App = () => {
     noteService.getAll().then((allPeople) => setPersons(allPeople));
   }, []);
 
+  const findDuplicate = persons.find((person) => person.name === newName);
+
   const addPerson = (event) => {
     event.preventDefault();
-    if (persons.some((e) => e.name === newName || e.number === newNum)) {
-      window.alert(`${newName} is already added to phonebook`);
+    if (findDuplicate) {
+      const msg = `${findDuplicate.name} is already added to phonebook, replace the old number with a new one?`;
+      if (window.confirm(msg)) {
+        noteService
+          .update(findDuplicate.id, {
+            name: newName,
+            number: newNum,
+          })
+          .then((update) => {
+            setPersons(
+              persons.map((person) =>
+                person.id !== update.id ? person : update
+              )
+            );
+            setNewName("");
+            setNewNum("");
+          });
+      }
     } else {
       const newPerson = { name: newName, number: newNum };
 
@@ -34,9 +52,8 @@ const App = () => {
   const delPerson = (event) => {
     if (window.confirm(`Delete ${event.target.name} ?`) === true) {
       noteService.del(event.target.id);
+      setPersons(persons.filter((person) => person.id != event.target.id));
     }
-
-    setPersons(persons.filter((person) => person.id != event.target.id));
   };
 
   const handleNameChange = (event) => {
