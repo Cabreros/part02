@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
 import noteService from "./modules/networking";
+import Notification from "./components/Notification";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -11,6 +11,7 @@ const App = () => {
   const [newNum, setNewNum] = useState("");
   const [filter, setFilter] = useState("");
   const [showAll, setShowAll] = useState(true);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
     noteService.getAll().then((allPeople) => setPersons(allPeople));
@@ -34,8 +35,13 @@ const App = () => {
                 person.id !== update.id ? person : update
               )
             );
+
+            setErrorMessage(`Updated ${newName}'s number.`);
             setNewName("");
             setNewNum("");
+            setTimeout(() => {
+              setErrorMessage(null);
+            }, 5000);
           });
       }
     } else {
@@ -44,8 +50,12 @@ const App = () => {
       noteService
         .create(newPerson)
         .then((newAdd) => setPersons(persons.concat(newAdd)));
+      setErrorMessage(`Added ${newName}`);
       setNewName("");
       setNewNum("");
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 5000);
     }
   };
 
@@ -83,6 +93,7 @@ const App = () => {
       <Filter value={filter} onChange={handleFilterChange} />
 
       <h2>add a new</h2>
+      <Notification message={errorMessage} />
       <PersonForm
         addPerson={addPerson}
         newName={newName}
