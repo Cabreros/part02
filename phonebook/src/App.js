@@ -42,14 +42,26 @@ const App = () => {
             setTimeout(() => {
               setErrorMessage(null);
             }, 5000);
-          });
+          })
+          .catch((error) =>
+            setErrorMessage(
+              `Information of ${newName} has already been removed from the server`,
+              error
+            )
+          );
       }
     } else {
       const newPerson = { name: newName, number: newNum };
 
       noteService
         .create(newPerson)
-        .then((newAdd) => setPersons(persons.concat(newAdd)));
+        .then((newAdd) => setPersons(persons.concat(newAdd)))
+        .catch.catch((error) =>
+          setErrorMessage(
+            `Information of ${newName} has already been removed from the server`,
+            error
+          )
+        );
       setErrorMessage(`Added ${newName}`);
       setNewName("");
       setNewNum("");
