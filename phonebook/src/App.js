@@ -17,22 +17,52 @@ const App = () => {
     noteService.getAll().then((allPeople) => setPersons(allPeople));
   }, []);
 
+  const findDuplicate = persons.find(
+    (person) => person.content.name === newName
+  );
+
   const addPerson = (event) => {
     event.preventDefault();
-
     const newPerson = { name: newName, number: newNum };
-
-    noteService
-      .create(newPerson)
-      .catch((error) =>
-        setErrorMessage(
-          `Information of ${newName} has already been removed from the server`,
-          error
-        )
-      );
-    setErrorMessage(`Added ${newName}`);
-    setNewName("");
-    setNewNum("");
+    if (findDuplicate) {
+      const msg = `${findDuplicate.content.name} is already added to phonebook, replace the old number with a new one?`;
+      if (window.confirm(msg)) {
+        console.log(findDuplicate);
+        noteService
+          .update(findDuplicate.id, {
+            content: {
+              name: newName,
+              number: newNum,
+            },
+          })
+          .then((update) => {
+            setErrorMessage(`Updated ${newName}'s number.`);
+            setNewName("");
+            setNewNum("");
+            setTimeout(() => {
+              setErrorMessage(null);
+            });
+          })
+          .catch((error) => {
+            setErrorMessage(
+              `Information of ${newName} has already been removed from the server`
+            );
+            console.log(error);
+          });
+      }
+    } else {
+      noteService
+        .create(newPerson)
+        .catch((error) =>
+          setErrorMessage(
+            `Information of ${newName} has already been removed from the server`,
+            error
+          )
+        );
+      setErrorMessage(`Added ${newName}`);
+      setNewName("");
+      setNewNum("");
+    }
     noteService.getAll().then((allPeople) => setPersons(allPeople));
   };
 
