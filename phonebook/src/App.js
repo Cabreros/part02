@@ -17,64 +17,30 @@ const App = () => {
     noteService.getAll().then((allPeople) => setPersons(allPeople));
   }, []);
 
-  const findDuplicate = persons.find((person) => person.name === newName);
-
   const addPerson = (event) => {
     event.preventDefault();
-    if (findDuplicate) {
-      const msg = `${findDuplicate.name} is already added to phonebook, replace the old number with a new one?`;
-      if (window.confirm(msg)) {
-        noteService
-          .update(findDuplicate.id, {
-            name: newName,
-            number: newNum,
-          })
-          .then((update) => {
-            setPersons(
-              persons.map((person) =>
-                person.id !== update.id ? person : update
-              )
-            );
 
-            setErrorMessage(`Updated ${newName}'s number.`);
-            setNewName("");
-            setNewNum("");
-            setTimeout(() => {
-              setErrorMessage(null);
-            }, 5000);
-          })
-          .catch((error) =>
-            setErrorMessage(
-              `Information of ${newName} has already been removed from the server`,
-              error
-            )
-          );
-      }
-    } else {
-      const newPerson = { name: newName, number: newNum };
+    const newPerson = { name: newName, number: newNum };
 
-      noteService
-        .create(newPerson)
-        .then((newAdd) => setPersons(persons.concat(newAdd)))
-        .catch.catch((error) =>
-          setErrorMessage(
-            `Information of ${newName} has already been removed from the server`,
-            error
-          )
-        );
-      setErrorMessage(`Added ${newName}`);
-      setNewName("");
-      setNewNum("");
-      setTimeout(() => {
-        setErrorMessage(null);
-      }, 5000);
-    }
+    noteService
+      .create(newPerson)
+      .catch((error) =>
+        setErrorMessage(
+          `Information of ${newName} has already been removed from the server`,
+          error
+        )
+      );
+    setErrorMessage(`Added ${newName}`);
+    setNewName("");
+    setNewNum("");
+    noteService.getAll().then((allPeople) => setPersons(allPeople));
   };
 
   const delPerson = (event) => {
     if (window.confirm(`Delete ${event.target.name} ?`) === true) {
+      console.log(event.target);
       noteService.del(event.target.id);
-      setPersons(persons.filter((person) => person.id != event.target.id));
+      noteService.getAll().then((allPeople) => setPersons(allPeople));
     }
   };
 
@@ -96,7 +62,7 @@ const App = () => {
   const filterNumbers = showAll
     ? persons
     : persons.filter((person) =>
-        person.name.toLowerCase().includes(filter.toLowerCase())
+        person.content.name.toLowerCase().includes(filter.toLowerCase())
       );
 
   return (
