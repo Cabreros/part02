@@ -39,31 +39,26 @@ const App = () => {
             setErrorMessage(`Updated ${newName}'s number.`);
             setNewName("");
             setNewNum("");
+            noteService.getAll().then((allPeople) => setPersons(allPeople));
             setTimeout(() => {
               setErrorMessage(null);
             });
           })
           .catch((error) => {
-            setErrorMessage(
-              `Information of ${newName} has already been removed from the server`
-            );
+            setErrorMessage(error.response.data);
             console.log(error);
           });
       }
     } else {
       noteService
         .create(newPerson)
-        .catch((error) =>
-          setErrorMessage(
-            `Information of ${newName} has already been removed from the server`,
-            error
-          )
-        );
-      setErrorMessage(`Added ${newName}`);
-      setNewName("");
-      setNewNum("");
+        .then((createdPerson) => {
+          setNewName("");
+          setNewNum("");
+          noteService.getAll().then((allPeople) => setPersons(allPeople));
+        })
+        .catch((error) => setErrorMessage(error.response.data.error));
     }
-    noteService.getAll().then((allPeople) => setPersons(allPeople));
   };
 
   const delPerson = (event) => {
