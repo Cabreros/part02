@@ -24,41 +24,40 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault();
     const newPerson = { name: newName, number: newNum };
-    if (findDuplicate) {
-      const msg = `${findDuplicate.content.name} is already added to phonebook, replace the old number with a new one?`;
-      if (window.confirm(msg)) {
-        console.log(findDuplicate);
-        noteService
-          .update(findDuplicate.id, {
-            content: {
-              name: newName,
-              number: newNum,
-            },
-          })
-          .then((update) => {
-            setErrorMessage(`Updated ${newName}'s number.`);
-            setNewName("");
-            setNewNum("");
-            noteService.getAll().then((allPeople) => setPersons(allPeople));
-            setTimeout(() => {
-              setErrorMessage(null);
-            });
-          })
-          .catch((error) => {
-            setErrorMessage(error.response.data);
-            console.log(error);
-          });
-      }
-    } else {
-      noteService
-        .create(newPerson)
-        .then((createdPerson) => {
-          setNewName("");
-          setNewNum("");
-          noteService.getAll().then((allPeople) => setPersons(allPeople));
-        })
-        .catch((error) => setErrorMessage(error.response.data.error));
-    }
+    // if (findDuplicate) {
+    //   const msg = `${findDuplicate.content.name} is already added to phonebook, replace the old number with a new one?`;
+    //   if (window.confirm(msg)) {
+    //     console.log(findDuplicate);
+    //     noteService
+    //       .update(findDuplicate.id, {
+    //         content: {
+    //           name: newName,
+    //           number: newNum,
+    //         },
+    //       })
+    //       .then((update) => {
+    //         setErrorMessage(`Updated ${newName}'s number.`);
+    //         setNewName("");
+    //         setNewNum("");
+    //         noteService.getAll().then((allPeople) => setPersons(allPeople));
+    //         setTimeout(() => {
+    //           setErrorMessage(null);
+    //         });
+    //       })
+    //       .catch((error) => {
+    //         setErrorMessage(error.response.data);
+    //         console.log(error);
+    //       });
+    //   }
+    // } else {
+    noteService
+      .create(newPerson)
+      .then((createdPerson) => {
+        setNewName("");
+        setNewNum("");
+        noteService.getAll().then((allPeople) => setPersons(allPeople));
+      })
+      .catch((error) => setErrorMessage(error.response.data.error));
   };
 
   const delPerson = (event) => {
